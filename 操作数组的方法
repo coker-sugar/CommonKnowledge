@@ -1,0 +1,8 @@
+常用的数组方法：
+    push、pop、shift、unshift、reverse、sort、splice、concat、join、slice、Indexof、lastIndexOf、foEach、map、filter、every、some、find、reduce
+会改变原数组：
+    push、pop、shift、unshift、reverse、sort、splice
+不改变原数组：
+    concat、join、slice、Indexof、lastIndexOf
+Es6新增方法：
+    foEach、map、filter、every、some、find、reduce
