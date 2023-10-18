@@ -1,0 +1,45 @@
+// 按时间排序的比较函数
+const compareTime = function(a, b) {
+  // 将“周一、周二”等转换为相应数字
+  const weekdays = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
+  const aWeekday = weekdays.indexOf(a.start.slice(0, 2));
+  const bWeekday = weekdays.indexOf(b.start.slice(0, 2));
+
+  // 判断星期的顺序
+  if (aWeekday < bWeekday) {
+    return -1;
+  } else if (aWeekday > bWeekday) {
+    return 1;
+  } else {
+    // 将时间转换为小时和分钟，再进行比较
+    const aTime = parseInt(a.start.slice(3, 5)) * 60 + parseInt(a.start.slice(6, 8));
+    const bTime = parseInt(b.start.slice(3, 5)) * 60 + parseInt(b.start.slice(6, 8));
+
+    if (aTime < bTime) {
+      return -1;
+    } else if (aTime > bTime) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+};
+
+// 日期改为星期
+const DataToWeek = function(tableData) {
+	const daysOfWeek = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
+	
+	const updatedData = tableData.map(item => {
+	    if (item.week.includes("-")) {
+	        const date = new Date(item.week);
+	        const dayOfWeek = daysOfWeek[date.getDay()];
+	        
+	        item.start = item.start.replace(item.week, dayOfWeek);
+	        item.end = item.end.replace(item.week, dayOfWeek);
+			item.week = dayOfWeek;
+	    }
+	    return item;
+	});
+	
+	return updatedData;
+};
