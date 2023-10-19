@@ -1,0 +1,5 @@
+// 查找到this.newStatus.id和this.tableData.id相等的对象
+let targetObject = this.tableData.find(obj => obj.id === this.newStatus.id);
+		if (targetObject) {
+			  Object.assign(targetObject, this.newStatus);  // 将查找到的对象替换掉
+		}
