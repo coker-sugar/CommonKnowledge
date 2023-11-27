@@ -20,7 +20,6 @@
     // 可以校验传入的值是否一致
     // toboolean(true,1);
 
-
 // 泛型约束：通过extends定义泛型约束
     interface Point {
         x: number;
