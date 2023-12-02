@@ -5,6 +5,7 @@ const compareTime = function(a, b) {
   const aWeekday = weekdays.indexOf(a.start.slice(0, 2));
   const bWeekday = weekdays.indexOf(b.start.slice(0, 2));
 
+
   // 判断星期的顺序
   if (aWeekday < bWeekday) {
     return -1;
