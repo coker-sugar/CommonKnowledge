@@ -1,0 +1,119 @@
+一、Object.create()
+// Object.create() 方法创建一个新对象，使用现有的对象来提供新创建的对象的_proto_
+    
+    // ① 解释:Object.create(proto,[propertiesObject])
+    // proto: 新创建对象的原型对象，必须为null或者原始包装对象，否则会抛出异常
+    // propertiesObject:可选参数,需要是一个对象,该对象的自有可枚举属性(自身定义的属性,不是原型链上的枚举属性) 将为新创建的对象添加 指定的属性值和对应的属性描述符
+    
+    // ② 分类
+    // 1.不传递propertiesObject
+    const createObj = {
+        name: 'zs'
+    }
+    const newCreateObj = Object.create(createObj);
+    console.log(newCreateObj) // {} createObj 作为 newCreateObj 的原型,name属性仍然放在newCreateObj的原型createObj中
+    console.log(newCreateObj.__proto__); // {name: 'zs'}
+    // 2.传递propertiesObject
+    const properCreateObj = {
+        name:'zs'
+    }
+    const newpropCreateObj = Object.create(properCreateObj, {
+        name: {
+            value: 'ad',
+            writable: true,
+            configurable: true,
+            enumerable: true
+        },
+        age: {
+            value: 11,
+            writable: true,
+            configurable: true,// 可以被删除
+            enumerable: true
+        }
+    })
+    console.log(newpropCreateObj);
+    
+    // ③ 为什么要使用Object.create()? 
+    const creobj = {
+        name:'ni'
+    }
+    const newCreObj = Object.create(creobj)
+    const newCre1Obj = Object(creobj)
+    console.log(creobj); // {name:'ni'}
+    console.log(newCreObj); // {}
+    console.log(newCre1Obj); // name:'ni'
+    console.log(creobj === newCre1Obj); // true
+    console.log(creobj === newCreObj); // false
+    // 我们发现使用Obect()创建的对象和直接创建的对象 是一致的,引用地址也是一致的
+    // 使用Object.create()创建的对象和creobj隔了一层,实现了引用地址解耦,当修改newCreObj的时候,不会影响原有数据
+    
+    // ④ 如何实现Object.create()?
+    const creat = function(proto) {
+        if(typeof proto !== "object" && typeof proto !== "function") {
+            throw new TypeError("proto必须是对象或者函数")
+        } else if(proto === null) {
+            throw new Error("在浏览器中暂不支持传递null")
+        }
+        // 创建一个构造函数
+        function F() {}
+        // 更改该函数的原型prototype
+        F.prototype = proto
+        // 返回构造函数的实例,这个时候返回的实例和传入的proto中间隔了一层 F
+        return new F()
+    }
+    const myCreateObj = creat(createObj);
+    console.log(myCreateObj);
+
+
+二、instanceof
+console.log([1,2,3] instanceof Object); // true
+    // 分别获取左右两边对象的原型:
+        // 左边是实例对象,使用getProtoTypeOf(left)获取左边对象的原型
+        // 右边是构造函数,使用right.prototype获得右边对象的原型
+    // 左边对象一直往上找,直到找到和右边对象原型相等了就返回true;
+    // 如果左边对象为null了就返回false
+
+    function myInstanceof(left,right) {
+        let proto = Object.getPrototypeOf(left),prototype = right.prototype;
+        // 获取对象的原型,获取构造函数的prototype
+
+        // 判断构造函数的prototype对象是否在对象的原型链上
+        while(true) {
+            if(!proto) return false;
+            if(proto === prototype) return true;
+            proto = Object.getPrototypeOf(proto);
+        }
+    }
+    console.log(myInstanceof({name:'zs',age:18},Object));
+
+
+三、new操作符
+// new操作实现
+    function Person(name,age) {
+        this.name = name;
+        this.age = age;
+    }
+    Person.prototype.sayName = function() {
+        console.log(this.name);
+    }
+    const person = new Person('ang',18)
+    console.log(person);
+    person.sayName()
+
+
+    // 实现new
+    function objectFactory(construct,...args) {
+        // 返回一个对象,在内部创建一个对象
+        let obj = {}
+        // 绑定构造函数construct的原型 obj
+        Object.setPrototypeOf(obj,construct.prototype)
+        // 等价于
+        // obj.__proto__ = construct.prototype
+
+        // 把 obj 绑定到 construct 构造函数上,并且传入剩余的参数
+        let result = construct.apply(obj,args)
+        // 判断返回的result是否是一个对象,如果是就返回result,如果不是就返回obj
+        return result instanceof Object ? result : obj
+    }
+    const p = objectFactory(Person,'yugang',18)
+    console.log(p);
