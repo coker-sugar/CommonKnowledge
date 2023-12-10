@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+<script>
+// JS概念与类型检测
+    console.log(typeof "1");
+    function func() {
+        return 0;
+    }
+    console.log(typeof func);
+    let obj = {
+        a: 111
+    }
+    console.log(typeof obj);
+    console.log(typeof null); // object
+    // number是数字或NaN，object是对象或者null
+    console.log('1···························');
+
+    console.log(typeof {"x":1}); // object
+    console.log(typeof [{x:1}]); // object 
+    // 数组是对象类型！
+    console.log('2···························');
+
+    console.log(typeof x); // undefined
+    // 基本数据类型：string，number，boolean，null，undefined，symbol
+    // 引用数据类型：object，array，function
+    console.log('3···························');
+
+    // JS共8中数据类型：Number，String，Boolean，Null，undefined，object，symbol，bigint
+    // BigInt 是可以表示任意精度整数的基本数据类型，存储在栈中
+    console.log('4···························');
+
+
+
+// 逻辑判断
+    console.log(null instanceof Object); // false
+    console.log(null == undefined); // true
+    console.log(NaN == NaN); // false
+    // null表示为空的引用，instanceof 表示某个变量是否是某个对象的实例；
+    // 虽然null的类型是object，但是null不具有任何对象的特性，即不能执行null.toString()等对象实例的调用
+    // NaN表示非数字，非数字是不相同的，NaN永远不可能等于NaN
+    console.log('1···························');
+
+    console.log( Symbol.for('a') === Symbol.for('a') ); // true
+    console.log( Symbol('a') === Symbol('a') ); // false
+    // {} === {} // false 左边和右边保存的内存地址不一样
+    // Symlbol和Symbol.for都会产生新的Symbol；
+    // 但是前者会被登记在全局环境中搜索，后者不会；Symbol.for()会先检查给定的key是否已经存在，如果不存在才会新建一个值
+    // Symbol.for("cat")执行30次，每次都会返回透镜一个Symbol，但是Symbol("cat")执行30次，会返回不同的Symbbol值
+    console.log('2···························');
+
+    console.log(1 || []); // 1 而不是true
+    console.log(true || 1); // true
+    console.log([] && ''); // []
+    console.log('' && true); // ''
+    // || 真前假后：如果为true，返回||前面的值；如果为false，返回&&后面的值
+    // && 假前真后：如果为假，返回&&前面的值；如果为true，返回&&后面的值
+    console.log('3···························');
+
+    console.log(1 == true); // true
+    console.log('111'< 2); // false
+    // 有一个操作数是布尔值，就先将它转为数值再比较，false转为0
+    // 有一个操作数是字符串，另一个操作数是数值，就先将字符串转为数值再比较
+    console.log('4···························');
+
+    // console.log([] === []);
+    console.log(undefined == 0); // false
+    console.log(undefined == false); // false
+    console.log(false == ''); // true
+    // undefined和null除和自身相比外，和其它任何类型的值相比都是不等的
+    console.log(undefined == undefined);
+    console.log(null == null);
+    // 布尔值 和 数字或者字符串比较时，两边都会转为数字再比较
+    console.log('5···························');
+
+    console.log(Number('a')); // NaN
+    console.log(-1 == true); // false
+    console.log(3 + '2'); // 32
+    console.log(![] == false); // true
+    // ! 逻辑非，操作非布尔值类型的数据时，会先把数据转换为布尔值再取反
+    console.log(Boolean([])); // true
+    console.log('6···························');
+
+    console.log (typeof(null) === typeof(window)) // true
+    // console.log ([1,2,3] === [1,2,3]) // false,对象和对象地址不同
+    console.log('7···························');
+
+
+// Math类型
+    console.log(Math.round(7.25)); // 7
+    console.log(Math.ceil(7.25)); // 8
+    console.log(Math.floor(7.25)); // 7
+    // round四舍五入，ceil天花板，floor地板
+    console.log('1···························');
+
+    console.log(Math.random());
+    console.log(Math.floor(Math.random()*6));
+    console.log(Math.floor(Math.random()*10));
+    console.log(Math.floor(Math.random()*11));
+    console.log(Math.ceil(Math.random()*10));
+    // random随机生成[0,1)
+    // 只有下面两个能生成[0,10]的随机整数
+    console.log('2···························');
+
+
+// 字符串
+    console.log("123".split(2)); // ['1','3']
+    // split可以将字符串分割成字符串数组，会删去对应索引处的值
+    console.log('1···························');
+
+    console.log('123'.match('23')); // ['23', index: 1, input: '123', groups: undefined]
+    console.log('123'.indexOf('23')); // 1
+    console.log('123'.search('23')); // 1
+    console.log('123'.concat('45')); // 12345
+    // match返回匹配数组
+    // indexOf和search返回匹配子串的第一个的位置
+    // indexOf是查找字符串中是否有子串，顺便返回一个索引，资源消耗小，效率高
+    // search是查找有某些特征的字符串，比如查找以a开头的后面跟着数字的字符串，资源消耗大
+    let text = "Mr. Blue has a blue house";
+    console.log(text.search(/blue/i));
+    console.log('2···························');
+
+
+// JSON数据
+    const fn = function(){ return 0;}
+    console.log(JSON.stringify(fn)); // undefined
+    const num = 123
+    console.log(JSON.stringify(num)); // 123
+    console.log(JSON.stringify(NaN)); // null
+    const b = true
+    console.log(JSON.stringify(b)); // true
+    // JSON.stringify() 会输出不包含空格或缩进的JSON字符串
+
+    // 小计：JSON.stringify()函数
+    let json1 = {
+      title: "Json.stringify",
+      author: [
+        "浪里行舟"
+      ],
+      year: 2021
+    };
+    let jsonText1 = JSON.stringify(json1);
+    console.log(jsonText1);
+    // 第二个参数：过滤器
+    let json2 = {
+      title: "Json.stringify",
+      author: [
+        "浪里行舟"
+      ],
+      year: 2021,
+      like: 'frontend',
+      weixin: 'frontJS'
+    };
+    let jsonText2 = JSON.stringify(json2, ['weixin']);
+    console.log(jsonText2);
+
+    const students = [
+      {
+        name: 'james',
+        score: 100,
+      }, {
+        name: 'jordon',
+        score: 60,
+      }, {
+        name: 'kobe',
+        score: 90,
+      }
+    ];
+
+    function replacer (key, value) {
+      if (key === 'score') {
+        if (value === 100) {
+          return 'S';
+        } else if (value >= 90) {
+          return 'A';
+        } else if (value >= 70) {
+          return 'B';
+        } else if (value >= 50) {
+          return 'C';
+        } else {
+          return 'E';
+        }
+      }
+      return value;
+    }
+    // 把分数换成等级
+    console.log(JSON.stringify(students, replacer, 4))
+    // 上面的4是字符串缩进：每级缩进4格
+
+    // 注意：
+    // 1.被转换值中有 NaN 和 Infinity
+    console.log(JSON.stringify([NaN, Infinity]));     // [null,null]
+
+    // 2.被转换值中有 undefined、任意的函数以及 symbol 值
+    console.log(JSON.stringify([undefined, function () { }, Symbol("")]));    // '[null,null,null]'
+    console.log(JSON.stringify({ x: undefined, y: function () { }, z: Symbol("") }));    // '{}'
+
+    // 3.循环引用：如果一个对象的属性值通过某种间接的方式指回该对象本身，那么就是一个循环引用。
+    // let bar = {
+    //   a: {
+    //     c: foo
+    //   }
+    // };
+    // let foo = {
+    //   b: bar
+    // };
+    // 此种情况下，序列化会报错
+    // JSON.stringify(foo)
+
+    // 4.不可枚举的属性默认会被忽略：
+    let personObj = Object.create(null, {
+      name: { value: "浪里行舟", enumerable: false },
+      year: { value: "2021", enumerable: true },
+    })
+    console.log(JSON.stringify(personObj)) // {"year":"2021"}
+    console.log('1···························');
+
+
+// 数组
+    // BAABB BBC
+    let arr1 = [1,2,3]
+    console.log(typeof(arr1.shift())); // number
+    console.log(arr1); // [2,3]
+    arr1 = [1,2,3]
+    console.log(typeof(arr1.filter((item)=>item > 1))); // object
+    console.log(typeof arr1.map((item,index)=>item)); // object
+    // shift会改变原数组，并且返回的是number类型
+    // filter不会改变原数组，且返回的是object类型
+    console.log('1···························');
+
+    let nums = [5,1,1,2,2,3,3,4,4]
+    console.log(Array.from(new Set(nums))); // [5, 1, 2, 3, 4]
+    nums = [5,1,1,2,2,3,3,4,4]
+    console.log( nums.filter((n, i) => {
+    return nums.indexOf(n) === i // [5, 1, 2, 3, 4]
+    }) );
+    nums = [5,1,1,2,2,3,3,4,4]
+    console.log(nums.forEach((n, i) => {
+    return nums.indexOf(n) === i  // undefined
+    }) ); 
+    nums = [5,1,1,2,2,3,3,4,4]
+    console.log(newNums = nums.reduce((acc, n, i) => {
+      return [].concat(acc, nums.indexOf(n) === i ? n : [] //[5, 1, 2, 3, 4]
+    )
+    })  ); 
+    // form去重
+    console.log('2···························');
+
+
+// 正则表达式
+    const reg = /^d+[^d]+/
+    console.log(reg.test(1234)); // false
+    console.log(reg.test('123a')); // false
+    console.log(reg.test('d123')); // true
+    console.log(reg.test('a123bde')); // false
+    // 字符串的
+    const re = new RegExp(2)
+    console.log("123".search(re)); // 1
+    console.log("134".search(re)); // -1 
+    // search和test的区别：serach匹配到符合规则的数据 返回索引，test匹配到符合规则的数据 返回布尔值
+    console.log('1···························');
+
+    const reg1 = /\d/
+    console.log(reg1.exec("qwe1234rty")); // ['1', index: 3, input: 'qwe1234rty', groups: undefined]
+    console.log(reg1.exec("qwerty")); // null
+    // 字符串的
+    console.log("qwe1234rty".match(reg1)); // ['1', index: 3, input: 'qwe1234rty', groups: undefined]
+    console.log("qwerty".match(reg1)); // null
+    // exec和match都相同，只要匹配到符合规则的数据就返回数组，否则返回null
+    console.log('2···························');
+
+    let qqq = " qqq"
+    console.log(qqq.replace(/\s+/g,""));
+    // 去除空格
+    console.log('3···························');
+
+
+// 其它
+    // 全局函数
+    // encodeURI
+    // parseFloat
+    // eval
+
+    // 编写高性能javascript：
+      // 1.遵循严格模式:"use strict"
+      // 2.将js脚本成组打包，减少请求，尽量减少使用闭包
+      // 3.使用非堵塞方式下载js脚本，最小化重绘和回流
+    
+    console.log(isNaN(123)); // false
+    console.log(isNaN(NaN)); // true
+
+    let datatime = new Date()
+    let formData = function(datatime) {
+      let y = datatime.getFullYear();
+      let x = datatime.getMonth() + 1;
+      x = x < 10 ? '0' + x : x;
+      let z = datatime.getDate();
+      z = z < 10 ? '0' + z : z;
+      return y + '-' + x + '-' + z;
+    }
+    console.log(formData(datatime));
+
+    // 最小化重绘repaint和回流reflow：
+      // 需要对元素进行复杂的操作时，可以先隐藏(display:"none")，操作完成后再显示
+      // 需要创建多个DOM节点时，使用DocumentFragment创建完后一次性的加入document
+      // 尽量避免用table布局(table元素一旦触发回流就会导致table里所有的其它元素回流)
+      console.log('1···························');
+
+// js原型
+    let emobi = Object.create(null)
+    console.log(emobi); // 没有原型
+    console.log([]); // 有原型
+    console.log({}); // 有原型
+    console.log('1···························');
+
+  
+// DOM
+    // 不支持冒泡的鼠标事件：onmouseleave、onmouseenter，
+    // 阻止默认事件的默认操作的方法是：preventDefault
+    // 事件传播的三个阶段：捕获 ——》 目标 ——》 冒泡
+    // onblur：失去焦点 | onfocus 获得焦点
+    
+    // 添加子节点： parentNode.appendChild(newNode)
+
+    // console.log(Geolocation.getPosition());
+    // 获取地理位置所在的经纬度
+
+// 箭头函数
+    // 箭头函数没有原型属性
+    // 箭头函数不绑定this，会捕获其所在的上下文的this值，作为自己的this值
+    // 箭头函数不绑定arguments，取而代之用rest参数解决
+    // 箭头函数不能用new创建一个箭头函数实例
+
+
+// Promise
+    Promise.all([]).then((res) => {
+        console.log('————————————————————分隔符——————————————————');
+        console.log('all'); // all 
+    });
+    Promise.race([]).then((res) => {
+        console.log('race'); // 无输出
+    });
+
+    let p1 = Promise.resolve('aaa')
+    let p2 = Promise.resolve('bbb')
+    let p3 = Promise.reject('ccc')
+    let p4 = Promise.resolve('ddd')
+    Promise.all([p1, p2,p3, p4]).then(res => {
+        console.log(res); //如果没有p3,即整个promise成功，那么返回数组
+    }).catch(err => {
+        console.log('error',err); // 一旦返回数据失败，就停止并输出失败数据
+    })
+    // 在所有的 Promise 对象都成功解决后才会将一个成功的结果数组作为解决值返回，如果有一个 Promise 对象被拒绝了，则会立即将一个拒绝原因作为拒绝值返回。
+    // 返回一个新的 Promise 对象，如果所有的 Promise 对象都成功解决，则返回一个解决值数组，数组中的解决值按照 Promise 对象数组中的顺序排列。如果有一个 Promise 对象被拒绝，则返回一个拒绝原因。
+
+    // let p5 = Promise.reject('aaa')
+    let p6 = Promise.resolve('bbb')
+    // let p7 = Promise.reject('ccc')
+    let p8 = Promise.resolve('ddd')
+    Promise.race([ p6, p8]).then(res => {
+        console.log('成功', res); //如果没有reject，返回第一个请求结果
+    }).catch(err => {
+        console.log('失败', err); // 一旦返回数据失败，就停止并输出失败数据
+    })
+    // 只要有一个 Promise 对象解决或拒绝，就会将其解决值或拒绝原因作为其自身的解决值或拒绝值返回。
+    // 返回一个新的 Promise 对象，其解决值或拒绝原因与第一个解决或拒绝的 Promise 对象相同。
+
+
+    // Promise.all() 适用于当我们需要等待多个异步操作全部完成，然后再进行下一步操作的场景。
+    // 例如，我们需要从多个 API 请求中获取数据，然后将这些数据合并成一个结果。
+    // 在这种情况下，我们可以使用 Promise.all() 来等待所有的请求都完成，然后将结果合并起来。
+
+    // Promise.race() 适用于当我们需要等待多个异步操作中的其中一个完成，然后再进行下一步操作的场景。
+    // 例如，我们需要从多个 API 请求中获取数据，但只需要获取其中一个请求的结果即可。
+    // 在这种情况下，我们可以使用 Promise.race() 来等待其中一个请求完成，然后处理其结果。
+
+  // 解构赋值
+    let [zz,xx,cc,vv,bb] = [1,2,3,4,5]; 
+    console.log([zz,xx,cc,vv,bb] );
+  
+
+// 多选
+// JS基础
+    // AC AD D ABDE BD ABCD AC
+    let aa = 0xa1;
+    // aa = 076;
+    // aa = 0b21
+    aa = 7e2; // 700
+    console.log(aa);    
+
+    console.log(typeof 17n); // bigint  
+
+    console.log(typeof 'string'); // string
+    console.log(String('string'.toString())); // string
+    console.log('e',
+      (function(string) {
+        return string
+      }('string'))
+    );
+    console.log(
+      JSON.parse('{"string":"string"}').string
+    );    
+
+    console.log(NaN === 'number'); // false     
+    console.log(isNaN('abc')); // true
+    console.log('.......................');
+
+// JS深入
+      function Person() {
+
+      }
+      var person = new Person()
+      console.log(person.contructor === Person);
+      console.log(Object.getPrototypeOf(person) === Person.prototype);
+
+// ES6
+      let numberone = 123
+      numberone = "123"
+      // let声明的变量和类型都可以改变
+      // const和let都不存在变量提升，同时存在暂时性死区，只能在声明的位置后面使用
+
+      // Promise.then的回调函数中，可以返回一共新的Promise
+      // 对于一个向后台获取数据已经产生结果的promise:p1，再次调用p1.then，不会重新发起请求获取数据
+
+// DOM
+      document.body.style.fontSize = '16px'
+      document.body.style.setProperty('background-color','#fff')
+      document.body.style = 'background-color: #fff'
+      // document.body.style.['background-color'] = '#fff'
+      
+      // 阻止冒泡事件的三种方法
+      // event.cancelable = true
+      // event.stopPropagation();
+      // return false;
+
+      // 该方法只能阻止默认事件，比如点击链接跳转，但是不能阻止冒泡事件发生
+      // event.preventDefault();
+
+// 填空题
+// 类型检测
+      console.log('`````````````````````````````');
+      console.log(typeof([])); // object
+      var x = typeof x
+      var res = typeof typeof x
+      console.log(x,res); // undefined,string
+      console.log(typeof null); // object
+      console.log(null instanceof Object); // false
+      // null用typeof检测是object，但是它实际上是属于null类型的
+      console.log(typeof typeof 0); // string
+      var ar1 = []
+      console.log(typeof ar1,Object.prototype.toString.call(ar1)); // object [object Array]
+      console.log(Object.prototype.toString.call(undefined)) // [object Undefined]
+      // 使用Object.prototype.toString.call(***),返回一个数组，分别为***的类型和它的具体类型
+
+// 类型转换
+      console.log("2"+3+4) // 234
+      console.log('5'+3,5+'3') // 53 , 53
+      console.log(parseInt("111办公室")) // 111
+      console.log(parseInt('77',40)); // NaN
+      console.log(["0x1","0x2","0x3"].map(parseInt)); // [1, NaN, 0]
+      console.log([2,3,4].map((item)=>item > 2)); // [false,true,true]
+// 逻辑判断
+      console.log([5<6<3,3<2<4]); // [true,true]
+      console.log(5<6 || 6<3); // true
+      console.log(3<2 || 2<4); // true
+      console.log('..........');
+      console.log(true||false&&false, true&&false||true) // true true
+      // 这里注意 && 优先级 > ||
+      console.log(1 + - - - - + + - + - - 1 ); // 2 后面的1的前面的+ - 都看作是正负符号
+      console.log([ 'a', ,'b', ,].length); // 4
+
+// 程序题
+// js基础
+      // case 1
+      function showCase(value) {
+          switch(value) {
+          case 'A':
+              console.log('Case A');
+              break;
+          case 'B':
+              console.log('Case B');
+              break;
+          case undefined:
+              console.log('Case undefined');
+              break;
+          default:
+              console.log('Case default'); // Case default
+          }
+      }
+      showCase(new String('A'));
+      console.log(new String('A')); // {'A'}
+      console.log((new String('A')) instanceof Object);
+
+      showCase(String('A')); // Case A
+
+      // case 2
+      console.log(Boolean(10 == "10")); // true
+
+      // case 3
+      function funcA(x){
+          var temp = 4;
+          function funcB(y){
+              console.log( ++x + y + (temp--)); // 16
+          }
+          funcB(5);
+      }
+      funcA(6)
+
+      // case 4 递归
+      var varArr = function(i,j,str) {  
+          return j == 0 ? str : varArr(i,--j,(str+= " " + i[j]));
+      }
+      var arr = new Array('apple','orange','peach','lime');
+      var str = varArr(arr,arr.length,"");
+      console.log(str); //  lime peach orange apple
+
+      // case5 
+      function greetingMaker(greeting) { 
+          function addName(name) {    
+              greeting  = greeting.split(' ').reverse().join("-");
+              return greeting + " " + name;
+          }
+          return addName;
+      }
+      var daytimeGreeting = greetingMaker("Good Day to you"); // function addName(name) {}
+      console.log(daytimeGreeting(name));  // you-to-Day-Good 
+
+      // case6
+      String.prototype.GetNum = function() { 
+      var regEx = /[^\d]/g; 
+      return this.replace(regEx, ''); 
+      };
+      var str = "a1b2c3";
+      str = str.GetNum();
+      console.log(str); // 123
+
+      // case7
+      function sum(a, b) {
+        return a + b;
+      }
+      console.log(sum(1, "2")); //12
+
+      // case8
+      let strq = "我非常喜欢编程";
+      strq.length = 3;
+      console.log(strq); // 我非常喜欢编程
+
+      // case9
+      let number = 0;
+      console.log(number++); // 0
+      console.log(++number); // 2
+      console.log(number); // 2
+
+      // case10
+      function numss(a, b) {
+          if (a > b)
+              console.log('a is bigger')
+          else 
+              console.log('b is bigger')
+          return a + b
+      }
+      console.log(numss(4, 2))
+      console.log(numss(1, 2))
+
+      // case11
+      function side(arr) {
+          arr[0] = arr[2];
+      }
+      function func1(a, b, c = 3) {
+          c = 10;
+          side(arguments);
+          console.log(arguments); // [1,1,1,...]
+          console.log(a + b + c);
+      }
+      function func2(a, b, c) {
+          c = 10;
+          side(arguments);
+          console.log(arguments); // [10,1,10,...]
+          console.log(a + b + c);
+      }
+      func1(1, 1, 1); // 12
+      func2(1, 1, 1); // 21
+
+      // case12
+      var g = 3;
+      var h = new Number(3);
+      var j = 3;
+      console.log(g == h); // true
+      console.log(g === h); // false
+      console.log(h === j); // false
+
+      // case13
+      var sedan = ["S60", "S90"];
+      var SUV = [ "XC60", "XC90"];
+      var Volvo = sedan.concat(SUV);
+      console.log(Volvo);
+
+      let arrs = []
+      arrs.push(1,2)
+      arrs.shift() // 删除数组首项元素
+      console.log(arrs);
+      arrs.concat([5,6]) // 这里为什么无效？？？
+      console.log(arrs);
+      arrs.splice(0,1,3) // 在索引为0开始，删掉1个元素，并添加元素3到数组中
+      console.log(arrs);  // 3
+
+      // case 14
+      // var aaaa = {}, bbbb = '123', cccc = 123;
+      var aaaa = {}, bbbb = Symbol('123'), cccc = Symbol('123');
+      // var aaaa = {}, bbbb = {key:'123'}, cccc = {key:'456'};
+      aaaa[bbbb] = 'b';
+      aaaa[cccc] = 'c';
+      console.log(aaaa[bbbb]); // c  b  c
+
+      console.log('..................');
+      // case 15
+      console.log(null == undefined);  // true
+      console.log(0.1 + 0.2);  // 0.30000000000000004
+      console.log(typeof Function); // function
+      console.log(typeof Object); // function
+      console.log(typeof {}); // object
+      console.log('lk' + 1); // lk1
+      console.log('lk' - 1); // NaN
+      console.log(Function instanceof Object); // true
+      console.log(Object instanceof Function); // true
+
+      // case 16
+      var array = []
+      for(var i = 0; i < 3; i++) {
+          array.push(() => i)
+          // 这里的箭头函数没有自己的this值，所以会捕获父作用域的变量
+          // 即所有箭头函数都捕获了相同的变量'i'，循环结束后，'i'变成了3
+      }
+      var newArray = array.map(el => el())
+      // map遍历array数组中的每个箭头函数，并将函数结果组成一个新数组返回
+      console.log(newArray)  // [3,3,3]
+
+      // case 17
+      function a(m, n) {
+          var b = function (l) {
+              return l <= m ? l * b(l + 1) : 1;
+              // 3 * 
+              // 4 *
+              // 1
+
+              // 3 * (4 * 1)
+          }
+          return b(m - n + 1); // 4 - 2 + 1 = 3
+      } 
+      console.log(a(4, 2)); // 12
+
+      // case 18
+      console.log(typeof undefined == typeof NULL);  // true
+      console.log(typeof function () {} ); // function 
+      console.log(typeof class {}); //  function
+
+      // case 19
+      var wer = 10
+      var rew = {
+          age: 11
+      }
+      function fmn(x,y) {
+          --y.age;
+          return --x;
+      }
+      fmn(wer,rew)
+      console.log(wer,rew); // 10 {age: 10}
+          
+      // case 20
+      function factorial(num) {
+          return num
+      }
+      var numb = 4;
+      var numberFactorial = (function (numb){
+          return (numb === 0)? 1: numb* factorial(numb-1)
+      })(numb)
+      console.log(numberFactorial) // 12
+
+      // case 21
+      var array = []
+      for(var i = 0; i < 3; i++) {
+          array.push(() => i)
+      }
+      var newArray = array.map(el => el())
+      console.log(newArray) // [3,3,3]
+
+      // case 22
+      function addToList(item, list) {
+          list.push(item)
+          console.log(list);
+          return list.push(item)
+      }
+      const result = addToList("nowcoder", ["hello"])
+      console.log(result) // 3 会返回数组长度
+
+      // case 23
+      const first = () => { console.log('first'); return false; }
+      const second = () => { console.log('second'); return true; }
+      console.log( first() && second() );
+      // first
+      // false
+      console.log( second() || first() );
+      // second
+      // true
+
+      // case 24
+      var s='12ab3cd', arr=s.split(/\d/);
+      console.log(arr); //  ['', '', 'ab', 'cd']
+      console.log(arr[3],arr[4]) // cd undefined
+
+      // case 25
+      // function getAge(args) { // 如果为args时结果为number
+        function getAge(...args) { 
+        console.log(typeof args);
+        // ...args剩余参数语法，将所有参数都收集到一个数组中
+        // console.log(args instanceof Array); // true
+      }
+      getAge(21); // object 
+      
+
+      // case 26
+      var arr=[1,2,3];
+      arr.push(arr.shift())
+      console.log(arr[1],arr[2]) // 3 1
+
+// JS深入
+      // case 1
+      var xxx = 1;   
+      var OBJ = {
+          xxx: 3,
+          fun:function () {
+              var xxx = 5;
+              console.log(this);
+              return this.xxx;
+          }
+      };
+      var fun = OBJ.fun;
+      console.log( OBJ.fun(), fun() ); // 3 1
+      // 第一次this指向OBJ这个对象 第二次this指向全局window
+
+      // case 2
+      var five = 1;
+      function test() { 
+        five = 2; 
+        console.log(five);  // 2
+        console.log(this); // test {}
+        console.log(this.five);  // undefined
+        var five;         // 这里会有变量提升
+        console.log(five); // 2
+      }
+      let testt = new test();
+      console.log(testt); // test {} ???
+
+
+      // case 3
+      function NEWfun () {
+          return () => {
+              return () => {
+                  return () => {
+                      console.log(this.name)
+                  }
+              }
+          }
+      }
+      var foo = NEWfun.call({name: 'foo'})
+      var t1 = foo.call({name: 'bar'})()() // foo 
+      var t2 = foo().call({name: 'baz'})() // foo 
+      var t3 = foo()().call({name: 'qux'}) // foo 
+      // 箭头函数的this是继承父级作用域的this，不是指向调用者
+      // 第一句：把this指向{name:'foo'}
+      // 之后的句子返回的都是箭头函数，使用call()不能改变this指向，作用域链上的this还是指向{name:'foo'}
+
+      // case 4
+      var jb = 2;
+      let jbo = {
+          jb: 1,
+          foo: () => {
+              console.log(this.jb) 
+          }
+      }
+      const jbo1 = jbo.foo
+      // log1
+      jbo.foo() // 2
+      // log2
+      jbo1()  // 2
+      // 箭头函数始终指向外面
+
+      var ccc = 3;
+      let objc = {
+        ccc: 4,
+        foo: function () { console.log(this.ccc) }
+      };
+      // 写法一
+      objc.foo() // 4
+      // 写法二
+      let fooc = objc.foo;
+      fooc() // 3
+      console.log(fooc); // ƒ () { console.log(this.ccc) }
+
+
+
+      // case 5
+      // 这里使用箭头函数会报错，因为箭头函数不能用于构造函数
+      const Persont = function(name="wang",age=10) {
+        this.name = name;
+        this.age = age;
+        return this.name +' is '+ this.age + 'years old'
+      }
+      let pers = new Persont('zhang',11)
+      console.log(pers) // Persont {name: 'zhang', age: 11}
+
+
+      // case 6
+      var personp = {
+        age: 18,
+        getAge: function() {
+          return this.age;
+        }
+      };
+      var getAge = personp.getAge
+      console.log(personp.getAge,getAge()); // 18,undefined
+      // getAget  this指向 window 没有定义
+
+      // case 7
+      var global = 'global';
+      var obj5 = {
+        global: 'local',
+        foo1: function(){
+            this.global = 'foo';
+        }.bind(window) // 由于new绑定优先级大于bind绑定，所以此时函数内部的this还是obj5
+      }
+      var bar = new obj5.foo1();
+      setTimeout(function() {
+          console.log('——————————————————分隔符新——————————————');
+          console.log(window.global); // global
+      }, 0);
+      console.log(bar.global); // foo
+
+      var bar3 = bar2 = bar;
+      bar2.global = 'foo2';
+      console.log(bar3.global); // foo2
+      console.log('——————————————————分隔符新——————————————');
+
+      // case 8
+      var qwe = {
+          name:"zhangsan",
+          sayName:function(){
+              console.info(this.name);
+          }
+      }
+      var wfunc = qwe.sayName; 
+      qwe.sayName(); // zhangsan 
+      wfunc(); // lisi
+      var name = "lisi";
+      qwe.sayName(); // zhangsan 
+      wfunc(); // lisi
+      console.log(wfunc); //  (){console.info(this.name);}
+      // wfunc 的this指向全局window
+
+      // case 9
+      var nnname='test' 
+      var h = {    
+          nnname: 'ass',    
+          getName: function() {    
+              return this.nnname;   
+          } 
+      } 
+      var r = h.getName; 
+      console.log(r); //  ƒ () {return this.nnname;}
+      console.log(r()); // test
+</script>
+</body>
+</html>
