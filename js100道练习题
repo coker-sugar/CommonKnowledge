@@ -877,3 +877,101 @@
 </script>
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+<script>
+    // 对象
+    const student = {name: 'ZhangSan'}
+    Object.defineProperty(student, 'age', {value: 22})
+    console.log(student) // {name: "ZhangSan";age: 22}
+    console.log(Object.keys(student)) // ["name"]
+
+    // generator
+    function * cb(x, y) {
+        for(let i = Math.ceil(x); i <= y; i++) {
+            yield i;
+        }
+    }
+    var a = cb(6, 9);
+    console.log(a.next()); // {value: 6, done: false}
+    console.log(a.next()); // {value: 7, done: false}
+    // 当a到9以后,done=true
+    // 1.函数生成器特点:function * fun(){}
+    // 2.调用函数生成控制器
+    // 3.通过next()方法执行函数
+    // 4.遇到yield函数暂停
+    // 5.next()继续执行
+    // 6.使用let每个i都生成一个作用域,互补干扰,保留当时的赋值
+
+    // 扩展运算符
+    function fn(...args) {
+      console.log(typeof args);
+    }
+    fn(21);
+    // Object
+
+    // Promise
+    Promise.reject(0)
+       .catch(e => e)
+       .catch(e => console.log(e))
+    // 无输出
+
+    // class
+    class Person {
+        constructor (name) {
+            this.name = name;
+        }
+        greet () {
+            console.log(`Hi, my name is ${this.name}`);
+        }
+        greetDelay (time) {
+            setTimeout(() => {
+                console.log(`Hi, my name is ${this.name}`);
+            }, time);
+        }
+    }
+    // ES6代码编译后所生成的ES5代码
+    function Person1(name) {
+        this.name = name
+    }
+    Person1.prototype = {
+        greet: function() {
+            console.log('Hi, my name is '+this.name);
+        },
+        greetDelay: function(time) {
+            var that = this
+            setTimeout(function() {
+                console.log("Hi, my name is "+that.name);
+            },time)
+        }
+    }
+
+    // 标签模板
+    function getPersonInfo(one, two, three) {
+        console.log(one)
+        console.log(two)
+        console.log(three)
+    }
+    const person = 'Lydia'
+    const age = 21
+    getPersonInfo
+    `${person} is ${age} years old` // Lydia 21
+
+    // module
+    // import * as data from "./module"
+    // console.log(data) // {default: function default(), name: ‘nowcoder’}
+
+</script>
+</body>
+</html>
+
+
+
