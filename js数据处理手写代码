@@ -1,0 +1,325 @@
+一、日期格式化
+<script>
+    const dateFormat = (dateInput,format) => {
+        var day = dateInput.getDate()
+        var month = dateInput.getMonth() + 1
+        var year = dateInput.getFullYear()
+        format = format.replace(/yyyy/,year)
+        format = format.replace(/MM/,month)
+        format = format.replace(/dd/,day)
+        return format
+    }
+    let date1 = dateFormat(new Date('2020-12-01'), 'yyyy/MM/dd') // 2020/12/01
+    let date2 = dateFormat(new Date('2020-04-01'), 'yyyy/MM/dd') // 2020/04/01
+    let date3 = dateFormat(new Date('2020-04-01'), 'yyyy年MM月dd日') // 2020年04月01日
+    console.log(date1);
+    console.log(date2);
+    console.log(date3);
+</script>
+
+二、不用临时变量交换a、b
+<script>
+    function swap(a,b) {
+        a = a + b
+        b = a - b
+        a = a - b
+        return {a,b}
+    }
+    console.log(swap(1,2)); // {a: 2, b: 1}
+</script>
+
+三、实现数组的乱序输出
+<script>
+/* 实现思路：
+    方法一：
+        - 取出数组的第一个元素，随机产生一个索引值，将该第一个元素和这个索引对应的元素进行交换
+        - 第二次取出数组的第二个元素，随机产生一个除了索引为1之外的索引值，并将第二个元素和该索引值对应的元素交换
+        - 按照上面的规律执行，知道遍历完成
+    方法二：
+        - 倒序遍历
+*/
+    // 随机索引
+    var arr = [1,2,3,4,5,6,7,8,9,10];
+    for(var i = 0;i < arr.length;i ++) {
+        const randomIndex = Math.round(Math.random() * (arr.length - 1 - i)) + i;
+        [arr[i],arr[randomIndex]] = [arr[randomIndex],arr[i]]
+    }
+    console.log(arr);
+
+    arr = [1,2,3,4,5,6,7,8,9,10];
+    // 倒序遍历
+    let length = arr.length,randomIndex,temp;
+    while(length) {
+        randomIndex = Math.floor(Math.random() * length--)
+        temp = arr[length];
+        arr[length] = arr[randomIndex];
+        arr[randomIndex] = temp;
+    }
+    console.log(arr);
+</script>
+
+四、数组求和
+<script>
+    // 1.使用arr.reduce()
+    let arr = [1,2,3,4,5]
+    let sum = arr.reduce((total,i)=>total += i,0)
+    console.log(sum); // 15
+    arr = [1,2,3,[[4,5],6],7,8,9]
+    sum = arr.toString().split(',').reduce((total,i) => total += Number(i),0)
+    console.log(sum); // 45
+
+    // 2.使用递归实现
+    arr = [1,2,3,4]
+    function add(arr) {
+        if(arr.length == 1) return arr[0]
+        return arr[0] + add(arr.slice(1))
+    }
+    console.log(add(arr)); // 10
+
+
+
+    // 使用reduce
+    console.log(arr.reduce((prev,cur) => prev += cur));
+    // 如果是内嵌数组
+    console.log(arr.toString().split(',').reduce((prev,cur) => prev += Number(cur),0)); // 注意reduce有两个参数,第二个参数跟一个0
+    // 使用递归
+    function addSum(arr) {
+        if(arr.length == 1) return arr[0]
+        return arr[0] + addSum(arr.slice(1)) // 注意这里不是concat,这里用 + 号拼接起来就行了
+    }
+    console.log(addSum(arr));
+</script>
+
+五、数组扁平化
+<script>
+    // 1.使用递归实现
+    let arr = [1,[2,[3,4,5]]]
+    function flatten(arr) {
+        let result = []
+        for(let i = 0;i < arr.length;i ++) {
+            if(Array.isArray(arr[i])) {
+                result = result.concat(flatten(arr[i]))
+            } else {
+                result.push(arr[i])
+            }
+        }
+        return result
+    }
+    console.log(flatten(arr)); //  [1, 2, 3, 4，5]
+
+    // 2.reduce函数迭代
+    function flatten1(arr) {
+        return arr.reduce(function(prev,next) {
+            return prev.concat(Array.isArray(next) ? flatten1(next) : next)
+        },[])
+    }
+    console.log(flatten1(arr)); //  [1, 2, 3, 4，5]
+
+    // 3.扩展运算符和some
+    function flatten2(arr) {
+        while(arr.some(item => Array.isArray(item))) {
+            arr = [].concat(...arr)
+        }
+        return arr;
+    }
+    console.log(flatten2(arr));
+
+    // 4.split和toString
+    function flatten3(arr) {
+        return arr.toString().split(',')
+    }
+    console.log(flatten3(arr));
+
+    // 5.es6中的flat方法
+    function flatten4(arr) {
+        return arr.flat(Infinity) // 参数为传递数组的展开深度，默认不填数值为1，即为展开一层；如果层数不确定，参数可以传入Infinity，无论多少层都要展开
+    }
+    console.log(flatten4(arr));
+
+    // 6.正则和JSON方法
+    function flatten5(arr) {
+        let str = JSON.stringify(arr) // 转为JSON字符串
+        str = str.replace(/(\[|\])/g,'') // 将所有'['',']'替换为''
+        str = '[' + str + ']' // 加上左右[]
+        return JSON.parse(str) // 解析为JSON格式
+    }
+    console.log(flatten5(arr));
+
+    console.log('````````````````````````````');
+
+    // 使用递归实现
+    function flat1(arr) {
+        let result = []
+        for(let i = 0;i < arr.length;i ++) {
+            if(Array.isArray(arr[i])) {
+                result = result.concat(flat1(arr[i])) // 注意这里的result要重新赋值一遍
+            } else {
+                result.push(arr[i])
+            }
+        }
+        return result
+    }
+    arr = [1,[2,[3,4,5]]]
+    console.log(flat1(arr));
+
+    // reduce函数实现
+    function flat2(arr) {
+        return arr.reduce((prev,cur) => {
+            return prev.concat(Array.isArray(cur) ? flat2(cur) : cur)
+        },[])  // 注意这里的[],第二个参数
+    }
+    arr = [1,[2,[3,4,5]]]
+    console.log(flat2(arr));
+
+    // 扩展运算符和some
+    function flat3(arr) {
+        while(arr.some(item => Array.isArray(item))) {
+            arr = [].concat(...arr)
+        }
+        return arr;
+    }
+    arr = [1,[2,[3,4,5]]]
+    console.log(flat3(arr));
+
+    // split和toString
+    function flat4(arr) {
+        return arr.toString().split(',')
+    }
+    arr = [1,[2,[3,4,5]]]
+    console.log(flat4(arr));
+
+    // flat方法
+    arr = [1,[2,[3,4,5]]]
+    console.log(arr.flat(Infinity));
+
+    // 正则和JSON方法
+    function flat5(arr) {
+        let str = JSON.stringify(arr)
+        str = str.replace(/(\[|\])/g,'')
+        str = '[' + str + ']'
+        return JSON.parse(str)
+    }
+    arr = [1,[2,[3,4,5]]]
+    console.log(flat5(arr));
+</script> 
+
+六、数组去重
+<script>
+    // 1.ES6方法，使用数据结构集合
+    let arr = [1,2,3,3,4,5,5,5,6]
+    console.log(Array.from(new Set(arr))); // [1, 2, 3, 4, 5, 6]
+
+    // 2.ES5方法，使用map存储不重复数字
+    arr = [1,2,3,3,4,5,5,5,6]
+    function uniqueArray(arr) {
+        let map = {}
+        let res = []
+        for(var i = 0;i < arr.length;i ++) {
+            if(!map.hasOwnProperty([arr[i]])) {
+                map[arr[i]] = 1;
+                res.push(arr[i])
+            }
+        }
+        return res
+    }
+    console.log(uniqueArray(arr));
+
+
+    // 使用es6方法集合
+    console.log(Array.from(new Set(arr)));
+    // 使用es5方法map
+    function unique(arr) {
+        let res = [],map = {}
+        for(let i = 0;i < arr.length;i ++) {
+            if(!map.hasOwnProperty(arr[i])) {
+                map[arr[i]] = 1; // 注意这里的map后面接的是 []
+                res.push(arr[i])
+            }
+        }
+        return res
+    }
+    console.log(unique(arr));
+</script>
+
+七、实现数组的flat方法
+<script>
+    let arr = [1,2,[3,[4,5,6]]]
+    function _flat(arr,depth) {
+        if(!Array.isArray(arr) || depth <= 0) {
+            return arr;
+        }
+        return arr.reduce((prev,cur) => {
+            if(Array.isArray(cur)) {
+                return prev.concat(_flat(cur,depth - 1))
+            } else {
+                return prev.concat(cur)
+            }
+        },[])
+    }
+    console.log(_flat(arr,2));
+
+    arr = [1,2,[3,[4,5,6]]]
+    function flatten(arr,depth) {
+        if(!Array.isArray(arr) || depth <= 0) return arr;
+        return arr.reduce((prev,cur) => {
+            if(Array.isArray(cur)) {
+                return prev.concat(flatten(cur,depth - 1))
+            } else {
+                return prev.concat(cur)
+            }
+        },[]) // 注意这里有个 [] (第二个参数)
+    }
+    console.log(flatten(arr,2));
+</script>
+
+
+八、实现push方法
+<script>
+    let arr = []
+    Array.prototype.push = function() {
+        for(let i = 0;i < arguments.length;i ++) {
+            this[this.length] = arguments[i]
+        }
+        return this.length
+    }
+    arr.push(2)
+    console.log(arr.push(3));
+    console.log(arr);
+
+    Array.prototype._push = function() {
+        for(let i = 0;i < arguments.length;i ++) {
+            this[this.length] = arguments[i]
+        }
+        return this.length // 注意返回的是长度
+    }
+    arr._push(4)
+    console.log(arr._push(5));
+    console.log(arr);
+</script>
+
+九、实现数组的filter方法
+<script>
+    Array.prototype._filter = function(fn) {
+        if(typeof fn !== 'function') throw Error('参数必须是一个函数')
+        const res = []
+        for(let i = 0;i < this.length;i ++) {
+            fn(this[i]) && res.push(this[i])
+        }
+        return res
+    }
+    let arr = [1,2,3,4,5]
+    let arr1 = arr._filter((item) => item > 3)
+    console.log(arr1);
+
+    Array.prototype.filter1 = function(fun) {
+        if(typeof fun !== 'function') throw Error('error')
+        let res = []
+        for(let i = 0;i < this.length;i ++) {
+            fun(this[i]) && res.push(this[i]) // 先确定this[i]满足函数条件,再把符合条件的this[i]添加进res
+        }
+        return res
+    }
+    let arr2 = arr.filter1((item) => item <= 3)
+    console.log(arr2);
+</script>
+
