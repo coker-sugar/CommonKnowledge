@@ -599,3 +599,124 @@ console.log([1,2,3] instanceof Object); // true
         return promise;
     }
 </script>
+
+十七、实现浅拷贝
+<script>
+/* 浅拷贝： 一个新对象对原始对象的属性值进行精确地拷贝
+    - 如果拷贝基本数据类型，拷贝的就是基本数据类型的值
+    - 如果拷贝引用数据类型，拷贝的就是内存地址
+实现浅拷贝的方法：
+    1.Object.assign()
+        1.1 是ES6中对象的拷贝方法，接受第一个参数是目标对象，其余参数是源对象
+        1.2 用法Object.assign(target,source1,source2...)
+        1.3 注意事项：
+            - 目标对象和源对象有同名属性 或者 多个源对象有同源属性，后面的属性会覆盖前面的属性
+            - 如果函数只有一个参数，当参数为对象时，直接返回该对象；当参数不是对象时，会先将参数转为对象然后返回
+            - 因为 null 和 undefined 不能转为对象，所以第一个参数不能是 null 和 undefined，会报错
+    2.扩展运算符
+        2.1 使用扩展运算符可以在构造字面量对象的时候，进行属性拷贝
+        2.2 语法let cloneObj = {...obj}
+    3.数组方法实现数组浅拷贝
+        3.1 Array.prototype.slice()
+            - 用法：array.slice(start,end) 
+            - 该方法不改变原数组
+            - 该方法有两个可选参数，如果都不写，就可以实现数组浅拷贝
+        3.2 Array.prototype.concat()
+            - concat()方法用于合并两个或多个数组，此方法不会更改现有数组，而是返回一个新数组
+            - 该方法有两个可选参数，如果都不写，就可以实现数组浅拷贝
+    4.手写实现
+*/
+    // 1. Object.assign(target,souce1,souce2../)
+    let target = {a: 1}
+    let obj1 = {b: 2}
+    let obj2 = {c: 3}
+    Object.assign(target,obj1,obj2)
+    console.log(target);
+    console.log(target instanceof Object);
+
+    // 2. let cloneObj = {...obj}
+    let object1 = {a: 1,b: {c: 1}}
+    let object2 = {...object1}
+    object1.a = 2
+    console.log(object1); //{a:2,b:{c:1}}
+    console.log(object2); //{a:1,b:{c:1}} 说明是新建了一个值，改变原对象，新对象不变
+    object2.b.c = 2
+    console.log(object1); //{a:2,b:{c:2}}
+    console.log(object2); //{a:1,b:{c:2}} 说明对象内部的对象还是用的同一个内存
+
+    // 3. 数组方法
+    let arr = [1,2,3]
+    // Array.prototype.slice()
+    console.log(arr.slice()); // [1,2,3]
+    console.log(arr.slice() === arr); // false
+
+    // Array.prototype.concat()
+    console.log(arr.concat()); // [1,2,3]
+    console.log(arr.concat() === arr); // false
+
+    // 4.手写实现
+    function shallowCopy(obj) {
+        // 只拷贝对象
+        if(!obj || typeof obj !== 'object') return;
+        // 根据object的类型判断是新建一个数组还是对象
+        let newObj = Array.isArray(obj) ? [] : {}
+        // 遍历obj判断obj的属性才拷贝
+        for(let key in obj) {
+            if(obj.hasOwnProperty(key)) {
+                newObj[key] = obj[key]
+            }
+        }
+        return newObj
+    }
+    console.log(shallowCopy(arr));
+    console.log(shallowCopy({a:1,b:{c:2}}));
+</script>
+
+十八、实现深拷贝
+<script>
+/* 深拷贝：如果遇到属性值为引用类型时，会新建一个引用类型并将对应的值复制给它
+    - 获得的新的引用类型而不是一个原有的类型的引用
+    - 可以用JSON的两个函数实现，但是由于JSON对象格式更严格，所以属性值里边出现“函数”或者“Symbol”类型的值时会转换失败
+实现深拷贝的方法：
+    1. JSON.stringify()
+        1.1 JSON.parse(JSON.stringify(obj)) 是比较常用的深拷贝的方法之一
+            - 原理：利用JSON.stringify()将js对象序列化(JSON字符串)，再利用JSON.parse()来反序列化(还原)js对象
+        1.2 该方法简单粗暴，但是存在问题，拷贝的对象如果有“函数”，“undefined”，“symbol”使用JSON.stringify()进行处理之后都会消失
+    2. 使用lodash的_.cloneDeep方法
+    3. 手写实现深拷贝函数
+*/
+    // 1. JSON.stringify()
+    let obj = {
+        a: 0,
+        b: {
+            c: 0
+        }
+    }
+    let obj1 = JSON.parse(JSON.stringify(obj))
+    obj.a = 1;
+    obj1.b.c = 1;
+    console.log(obj); // { a: 1,b: {c: 0} }
+    console.log(obj1); // { a: 0,b: {c: 1} }
+
+    // 2. lodash的_.cloneDeep
+    // var _ = require('lodash')
+    // var obj2 = _.cloneDeep(obj)
+    // console.log(obj2);
+
+    // 3. 手写实现深拷贝函数
+    function deepCopy(obj) {
+        if(!obj || typeof obj !== 'object') return ;
+        let newObj = Array.isArray(obj) ? [] : {}
+        for(let key in obj) {
+            if(obj.hasOwnProperty(key)) {
+                newObj[key] =
+                    typeof obj[key] === "object" ? deepCopy(obj[key]) : obj[key]
+            }
+        }
+        return newObj
+    }
+    let obj2 = deepCopy(obj)
+    obj2.a = 999;
+    console.log(obj);
+    console.log(obj2);
+</script> 
