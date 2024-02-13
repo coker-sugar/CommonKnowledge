@@ -15,7 +15,6 @@ let anyThing: any = "hello";
 console.log(anyThing.getName);
 anyThing = 123; // 这个任意值不受类型限制，就和以前的let近似
 
-
 // 2.参数类型和返回类型注解 :
 function greet(name: string): void {
     console.log("hello" + name);
