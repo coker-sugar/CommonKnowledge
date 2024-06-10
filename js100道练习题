@@ -9,6 +9,7 @@
 <script>
 
 
+
 // JS概念与类型检测
     console.log(typeof "1");
     function func() {
